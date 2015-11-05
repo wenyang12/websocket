@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>聊天室</title>
+</head>
+<body>
+<input type="button" value="断开链接" onclick="disconect();">
+姓名：<input type="text" name="msgname" id="msgname">
+聊天内容：
+<input type="text" name="msgtxt" id="msgtxt" maxlength="100">
+<input type="button" id=enter value="发言" onclick="send_msg();">
+<br>
+<div id="valueLabel"></div>
+<script>
+    var s = new WebSocket("ws://localhost:8000/");//链接websocket服务器
+    var valueLabel = document.getElementById('valueLabel');
+    s.onopen = function(event) {//当链接成功时
+        valueLabel.innerHTML="<p>已经链接到WebSocket服务器</p>";
+        console.log("链接成功了！！！");
+    };
+    s.onmessage = function(event) {//收到服务器传来信息的事件处理
+        valueLabel.innerHTML +="<p>"+event.data+" "+CurentTime()+"</p>";
+    };
+    s.onclose = function(event) { //链接关闭时的事件处理
+        console.log("连接关闭了！！！");
+        console.log("readyState " + s.readyState);
+    };
+    function send_msg() {//向服务器发出信息
+        var msgName = document.getElementById('msgname').value;
+        var msg = document.getElementById('msgtxt').value;
+        s.send(msgName + "说: " + msg + " ========= " + CurentTime());
+    }
+    function disconect() {//断开链接的函数
+        s.close();// 关闭连接
+        valueLabel.innerHTML = "<p>已经断开了跟WebSocket服务器的链接</p>";
+        alert("断开了！");
+
+    }
+    function CurentTime() {// 获取当前时间的函数
+        return (new Date().toLocaleString());
+    }
+</script>
+</body>
+</html>

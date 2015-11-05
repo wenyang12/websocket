@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id=support></div>
+<script type="text/javascript">
+    if(window.WebSocket){
+        document.getElementById("support").innerHTML = "您的浏览器支持HTML5的WebSocket协议";
+    }
+    else{
+        document.getElementById("support").innerHTML = "您的浏览器不支持HTML5的WebSocket协议";
+    }
+</script>
+</body>
+</html>
