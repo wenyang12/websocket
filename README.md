@@ -14,7 +14,8 @@ categories: [websoket, 聊天室, html5]
 
 ## 二、检查浏览器是否支持websocket
 代码如下：
-    >if(window.WebSocket){
+
+    if(window.WebSocket){
         document.getElementById("support").innerHTML = "您的浏览器支持HTML5的WebSocket协议";
     }
     else{
@@ -29,29 +30,31 @@ categories: [websoket, 聊天室, html5]
     - 下载后直接 `npm install` 安装即可
 - 新建服务端代码文件 `chat_server.js` 目录为：`websocket/chat_server.js`
 
->var ws = require("nodejs-websocket"); //获取nodejs-websocket模块
-var server = ws.createServer(function(conn){ //创建websocket服务器
-        conn.sendText('您好! 欢迎您加入聊天室！'); //向接入的客户端发送消息
-        console.log("有新聊天者加入");
-        conn.on("text", function(msg){//监听是否有客户端发送消息过来
-                broadcast(conn.server, msg);//向所有客户端广播消息
-                console.log(msg);
+
+    var ws = require("nodejs-websocket"); //获取nodejs-websocket模块
+    var server = ws.createServer(function(conn){ //创建websocket服务器
+            conn.sendText('您好! 欢迎您加入聊天室！'); //向接入的客户端发送消息
+            console.log("有新聊天者加入");
+            conn.on("text", function(msg){//监听是否有客户端发送消息过来
+                    broadcast(conn.server, msg);//向所有客户端广播消息
+                    console.log(msg);
+                });
+            conn.on("close", function(code, reason){//监听客户端关闭连接
+                    console.log(code+" 连接关闭了");//关闭掉浏览器窗口断开连接code为1001，通过代码断开连接code：1005
+                })
+        }).listen(8000, function(){//监听8000端口
+                console.log("Hello,Server is Running:8000");
             });
-        conn.on("close", function(code, reason){//监听客户端关闭连接
-                console.log(code+" 连接关闭了");//关闭掉浏览器窗口断开连接code为1001，通过代码断开连接code：1005
-            })
-    }).listen(8000, function(){//监听8000端口
-            console.log("Hello,Server is Running:8000");
-        });
-function broadcast(server, msg){
-        server.connections.forEach(function(conn){
-                conn.sendText(msg);
-            })
-    }
+    function broadcast(server, msg){
+            server.connections.forEach(function(conn){
+                    conn.sendText(msg);
+                })
+        }
 
 - 新建客户端代码文件 `chat.html` 目录为 `websocket/chat.html`
 
-    >var s = new WebSocket("ws://localhost:8000/");//链接websocket服务器
+
+    var s = new WebSocket("ws://localhost:8000/");//链接websocket服务器
     var valueLabel = document.getElementById('valueLabel');
     s.onopen = function(event) {//当链接成功时
         valueLabel.innerHTML="<p>已经链接到WebSocket服务器</p>";
