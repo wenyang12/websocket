@@ -14,26 +14,13 @@ categories: [websoket, 聊天室, html5]
 
 ## 二、检查浏览器是否支持websocket
 代码如下：
-```javascript support.html
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<div id=support></div>
-<script type="text/javascript">
-    if(window.WebSocket){
+    >if(window.WebSocket){
         document.getElementById("support").innerHTML = "您的浏览器支持HTML5的WebSocket协议";
     }
     else{
         document.getElementById("support").innerHTML = "您的浏览器不支持HTML5的WebSocket协议";
     }
-</script>
-</body>
-</html>
-```
+    
 ## 三、创建 websocket node.js端服务器
 - 安装依赖包 nodejs-websoket 依赖包官方地址可以移步[这里](https://www.npmjs.com/package/nodejs-websocket)
     >npm install nodejs-websoket --save-dev
@@ -42,8 +29,7 @@ categories: [websoket, 聊天室, html5]
     - 下载后直接 `npm install` 安装即可
 - 新建服务端代码文件 `chat_server.js` 目录为：`websocket/chat_server.js`
 
-```javascript chat_server.js
-var ws = require("nodejs-websocket"); //获取nodejs-websocket模块
+>var ws = require("nodejs-websocket"); //获取nodejs-websocket模块
 var server = ws.createServer(function(conn){ //创建websocket服务器
         conn.sendText('您好! 欢迎您加入聊天室！'); //向接入的客户端发送消息
         console.log("有新聊天者加入");
@@ -62,26 +48,10 @@ function broadcast(server, msg){
                 conn.sendText(msg);
             })
     }
-```
+
 - 新建客户端代码文件 `chat.html` 目录为 `websocket/chat.html`
 
-```javascript chat.html
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>聊天室</title>
-</head>
-<body>
-<input type="button" value="断开链接" onclick="disconect();">
-姓名：<input type="text" name="msgname" id="msgname">
-聊天内容：
-<input type="text" name="msgtxt" id="msgtxt" maxlength="100">
-<input type="button" id=enter value="发言" onclick="send_msg();">
-<br>
-<div id="valueLabel"></div>
-<script>
-    var s = new WebSocket("ws://localhost:8000/");//链接websocket服务器
+    >var s = new WebSocket("ws://localhost:8000/");//链接websocket服务器
     var valueLabel = document.getElementById('valueLabel');
     s.onopen = function(event) {//当链接成功时
         valueLabel.innerHTML="<p>已经链接到WebSocket服务器</p>";
@@ -107,10 +77,7 @@ function broadcast(server, msg){
     function CurentTime() {// 获取当前时间的函数
         return (new Date().toLocaleString());
     }
-</script>
-</body>
-</html>
-```
+
 ## 启动服务器
 >node chat_server.js
 
